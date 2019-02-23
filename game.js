@@ -2,6 +2,9 @@ var config = {
     type: Phaser.AUTO,
     width: 800,
     height: 600,
+    physics: {
+        default: 'arcade'
+    },
     scene: {
         preload: preload,
         create: create,
@@ -22,24 +25,32 @@ var cursors;
 function create () {
     this.add.tileSprite(400, 300, 800, 600, 'sand');
     
-    sprPlayer = this.add.sprite(100, 300, 'cowboy');
+    sprPlayer = this.physics.add.sprite(100, 300, 'cowboy');
     
     this.anims.create({
         key: 'up',
-        frames: this.anims.generateFrameNumbers('cowboy', { start: 83, end: 97 }),
+        frames: this.anims.generateFrameNumbers('cowboy', { start: 71, end: 79 }),
         frameRate: 20,
-        repeat: -1
     });
     
     this.anims.create({
         key: 'down',
-        frames: this.anims.generateFrameNumbers('cowboy', { start: 5, end: 8 }),
+        frames: this.anims.generateFrameNumbers('cowboy', { start: 126, end: 130 }),
         frameRate: 10,
-        repeat: -1
     });
+    
+    cursors = this.input.keyboard.createCursorKeys();
     
 }
 
 function update () {
-    sprPlayer.anims.play('up', true);
+    if(cursors.up.isDown){
+        sprPlayer.y-= 2;
+        sprPlayer.anims.play('up', true);
+    } else if(cursors.down.isDown){
+        sprPlayer.y+= 2;
+        sprPlayer.anims.play('down', true);
+    } else {
+        sprPlayer.anims.stop(null, false);
+    }
 }
